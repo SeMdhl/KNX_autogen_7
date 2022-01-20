@@ -277,6 +277,16 @@ void Knx_dt_Lc_OP(std::string& sPath, int& iMaster, int* iKnx, std::string& sRom
         fOutput << "</documentation>\n" + Tabs(5);
         fOutput << "</variable>\n\t";
     }
+
+    fOutput << "<variable name=\"LC601_SP\">\n\t";
+    fOutput << "<type>\n\t";
+    fOutput << "<REAL />\n\t";
+    fOutput << "</type>\n\t";
+    fOutput << "<documentation>\n" + Tabs(7);
+    fOutput << "<xhtml xmlns=\"http://www.w3.org/1999/xhtml\">LC SP</xhtml>\n" + Tabs(6);
+    fOutput << "</documentation>\n" + Tabs(5);
+    fOutput << "</variable>\n\t";
+
         //Force
         fOutput << "<variable name=\"LC601_MAN\">\n\t";
         fOutput << "<type>\n\t";
@@ -313,6 +323,16 @@ void Knx_dt_Lc_CMD(std::string& sPath, int& iMaster, int* iKnx, std::string& sRo
 
     if (!xLc)
     {
+        fOutput << "<variable name=\"LC601_SP\">\n\t";
+        fOutput << "<type>\n\t";
+        fOutput << "<REAL />\n\t";
+        fOutput << "</type>\n\t";
+        fOutput << "<documentation>\n" + Tabs(7);
+        fOutput << "<xhtml xmlns=\"http://www.w3.org/1999/xhtml\">LC SP</xhtml>\n" + Tabs(6);
+        fOutput << "</documentation>\n" + Tabs(5);
+        fOutput << "</variable>\n\t";
+
+
         fOutput << "<variable name=\"LC601_MAN\">\n\t";
 
         fOutput << "<type>\n\t";
@@ -4688,28 +4708,44 @@ void Knx_cfc_In_Lh(std::string& sPath, std::string& sGVL, std::string& sAdresseF
     return;
 }
 
-//Lc Man
+//Lc
 void Knx_cfc_In_Lc(std::string& sPath, std::string& sGVL, std::string& sAdresseFormat, std::string& sRom, int* iCfc_Id, int* iCfc_y, int& iAntall, int* iInOut)
 {
     std::ofstream fOutput(sPath, std::ios::app);
 
     fOutput << "<inVariable localId=\"" << (0 + *iCfc_Id) << "\">\n\t";
-    fOutput << "<position x=\"" << (4) << "\" y=\"" << (30 + *iCfc_y + *iInOut) << "\" />\n\t";
+    fOutput << "<position x=\"" << (5) << "\" y=\"" << (30 + *iCfc_y + *iInOut) << "\" />\n\t";
+    fOutput << "<connectionPointOut>\n\t";
+    fOutput << "<expression />\n\t";
+    fOutput << "</connectionPointOut>\n\t";
+    fOutput << "<expression>" << sGVL << "." << sAdresseFormat << "_" << sRom << ".LC601_SP</expression>\n\t";
+    fOutput << "</inVariable>\n\t";
+
+    fOutput << "<connector localId=\"" << (1 + *iCfc_Id) << "\" name=\"\">\n\t";
+    fOutput << "<position x=\"" << (0) << "\" y=\"" << (0 + *iCfc_y) << "\" />\n\t";
+    fOutput << "<connectionPointIn>\n\t";
+    fOutput << "<connection refLocalId=\"" << (0 + *iCfc_Id) << "\" formalParameter=\"" << sGVL << "." << sAdresseFormat << "_" << sRom << ".LC601_SP\" />\n\t";
+    fOutput << "</connectionPointIn>\n\t";
+    fOutput << "</connector>\n\t";
+
+
+    fOutput << "<inVariable localId=\"" << (2 + *iCfc_Id) << "\">\n\t";
+    fOutput << "<position x=\"" << (4) << "\" y=\"" << (31 + *iCfc_y + *iInOut) << "\" />\n\t";
     fOutput << "<connectionPointOut>\n\t";
     fOutput << "<expression />\n\t";
     fOutput << "</connectionPointOut>\n\t";
     fOutput << "<expression>" << sGVL << "." << sAdresseFormat << "_" << sRom << ".LC601_MAN</expression>\n\t";
     fOutput << "</inVariable>\n\t";
 
-    fOutput << "<connector localId=\"" << (1 + *iCfc_Id) << "\" name=\"\">\n\t";
+    fOutput << "<connector localId=\"" << (3 + *iCfc_Id) << "\" name=\"\">\n\t";
     fOutput << "<position x=\"" << (0) << "\" y=\"" << (0 + *iCfc_y) << "\" />\n\t";
     fOutput << "<connectionPointIn>\n\t";
-    fOutput << "<connection refLocalId=\"" << (0 + *iCfc_Id) << "\" formalParameter=\"" << sGVL << "." << sAdresseFormat << "_" << sRom << ".LC601_MAN\" />\n\t";
+    fOutput << "<connection refLocalId=\"" << (2+ *iCfc_Id) << "\" formalParameter=\"" << sGVL << "." << sAdresseFormat << "_" << sRom << ".LC601_MAN\" />\n\t";
     fOutput << "</connectionPointIn>\n\t";
     fOutput << "</connector>\n\t";
 
-    (*iInOut)++;
-    (*iCfc_Id) += 2;
+    (*iInOut)+=2;
+    (*iCfc_Id) += 4;
 
     fOutput.close();
     return;
@@ -4925,10 +4961,21 @@ void Knx_cfc_In_Fb_Lh(std::string& sPath, std::string& sGVL, std::string& sAdres
     return;
 }
 
-//Lc Man
+//Lc
 void Knx_cfc_In_Fb_Lc(std::string& sPath, std::string& sGVL, std::string& sAdresseFormat, std::string& sRom, int* iCfc_Order, int* iCfc_Id, int* iCfc_y, int& iAntall, int& iInOut, int* iFb)
 {
     std::ofstream fOutput(sPath, std::ios::app);
+
+
+    fOutput << "<variable formalParameter=\"LC601_SP\">\n\t";
+    fOutput << "<connectionPointIn>\n\t";
+    fOutput << "<relPosition x=\"" << (0) << "\" y=\"" << (16 + *iFb + *iCfc_y) << "\" />\n\t";
+    fOutput << "<connection refLocalId=\"" << (*iCfc_Id - (iInOut * 2) + (*iFb * 2)) << "\" />\n\t";
+    fOutput << "</connectionPointIn>\n\t";
+    fOutput << "</variable>\n\t";
+
+    (*iFb)++;
+
     fOutput << "<variable formalParameter=\"LC601_MAN\">\n\t";
     fOutput << "<connectionPointIn>\n\t";
     fOutput << "<relPosition x=\"" << (0) << "\" y=\"" << (16 + *iFb + *iCfc_y) << "\" />\n\t";

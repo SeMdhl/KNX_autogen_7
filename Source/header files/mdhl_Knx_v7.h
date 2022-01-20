@@ -271,6 +271,12 @@ void WriteXML_KNX(std::string sPath, bool (&bUsed)[1000], std::string &sGVL, std
                         case 6:
                             if (fOutput.is_open() == false)
                                 fOutput.open(sPath, std::ios::app);
+                            
+                            fOutput << "<variable name = \"LC601_SP\">\n\t";
+                            fOutput << "<type>\n\t";
+                            fOutput << "<REAL/>\n\t";
+                            fOutput << "</type>\n\t";
+                            fOutput << "</variable>\n\t";
 
                             fOutput << "<variable name = \"LC601_MAN\">\n\t";
                             fOutput << "<type>\n\t";
@@ -286,6 +292,12 @@ void WriteXML_KNX(std::string sPath, bool (&bUsed)[1000], std::string &sGVL, std
                             {
                                 if (fOutput.is_open() == false)
                                     fOutput.open(sPath, std::ios::app);
+
+                                fOutput << "<variable name = \"LC601_SP\">\n\t";
+                                fOutput << "<type>\n\t";
+                                fOutput << "<REAL/>\n\t";
+                                fOutput << "</type>\n\t";
+                                fOutput << "</variable>\n\t";
 
                                 fOutput << "<variable name = \"LC601_MAN\">\n\t";
                                 fOutput << "<type>\n\t";
